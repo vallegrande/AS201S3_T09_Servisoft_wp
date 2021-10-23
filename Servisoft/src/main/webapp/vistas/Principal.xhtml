@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<h:head>
+	<h:outputStylesheet library="css" name="Principal.css" />
+	<title>Principal</title>
+</h:head>
+<h:body>
+	<h:form>
+		<p:tabMenu activeIndex="#{param.i}">
+			<p:menuitem value="Inicio" outcome="/ui/menu/tabMenu" icon="pi pi-fw pi-home" url="Principal.xhtml">
+				<f:param name="i" value="0" />
+			</p:menuitem>
+			<p:menuitem value="Productos" outcome="/ui/menu/tabMenu" icon="pi pi-fw pi-home" url="/Servisoft/faces/vistas/Producto.xhtml">
+				<f:param name="i" value="1" />
+			</p:menuitem>
+			<p:menuitem value="Ventas" outcome="/ui/menu/tabMenu" icon="pi pi-fw pi-home" url="/Servisoft/faces/vistas/Venta.xhtml">
+				<f:param name="i" value="2" />
+			</p:menuitem>
+			<p:menuitem value="Cerrar Sesión" outcome="/ui/menu/tabMenu" icon="pi pi-fw pi-home" url="/Servisoft/faces/index.xhtml">
+				<f:param name="i" value="3" />
+			</p:menuitem>
+		</p:tabMenu>
+	</h:form>
+	<p:splitter style="height: 300px" styleClass="p-mb-5">
+                    <p:splitterPanel styleClass="p-d-flex p-ai-center p-jc-center" style="background-color: #FFEEDB; border: 0px">
+                        <p:outputPanel deferred="true">
+                            <h1>Bodega Zapata - Lunahuaná</h1>
+                            <p>Somos una bodega productora de Pisco que inicia operaciones en el año 1982 de la mano de nuestro fundador 
+                                Don Víctor Zapata Velit Campeón Nacional de Pisco con toda una vida dedica a la vid y nuestro afamado espirituoso.</p>
+                        </p:outputPanel>
+                    </p:splitterPanel>
+                    <p:splitterPanel>
+                        <p:graphicImage name="img/brand_zapata.jpg" />
+                    </p:splitterPanel>
+                </p:splitter>
+                <h3 style="margin-top: 0">Galería de Fotos</h3>
+                <p:lightBox styleClass="imagebox" id="lighbox1">
+                    <h:outputLink value="resources/img/A.jpg" title="Pisco">
+                        <p:graphicImage name="img/A.jpg" id="nature1" styleClass="p-shadow-4"
+                                        style="height: 15rem; width: 22rem"/>
+                    </h:outputLink>
+                    <h:outputLink value="resources/img/E.jpg" title="Recorrido Turístico">
+                        <p:graphicImage name="img/E.jpg" id="nature2" styleClass="p-shadow-4"
+                                        style="height: 15rem; width: 22rem"/>
+                    </h:outputLink>
+                    <h:outputLink value="resources/img/C.jpg" title="Vino">
+                        <p:graphicImage name="img/C.jpg" id="nature3" styleClass="p-shadow-4"
+                                        style="height: 15rem; width: 22rem"/>
+                    </h:outputLink>
+                    <h:outputLink value="resources/img/D.jpg" title="Botijas">
+                        <p:graphicImage name="img/D.jpg" id="nature4" styleClass="p-shadow-4"
+                                        style="height: 15rem; width: 22rem"/>
+                    </h:outputLink>
+                </p:lightBox>
+	<div class="commentFooter" align="center">
+		<footer> <h:form>
+			<div class="commentHead">
+				<h1>Dejanos tus comentarios (Slack)</h1>
+			</div>
+			<div class="commentContainer">
+				<p:inputTextarea id="txtSlackPrin"
+					placeholder="Envíanos un comentario" cols="60"
+					value="#{clienteBean.modelo.comment}">
+				</p:inputTextarea>
+			</div>
+			<div class="">
+				<p:commandButton value="Enviar"
+					actionListener="#{clienteBean.comment()}" update="txtSlackPrin" />
+			</div>
+		</h:form> </footer>
+	</div>
+</h:body>
+</html>

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<h:head>
+	<title>Ventas</title>
+</h:head>
+<h:body>
+	<h:form>
+		<p:tabMenu activeIndex="#{param.i}">
+			<p:menuitem value="Inicio" outcome="/ui/menu/tabMenu"
+				icon="pi pi-fw pi-home" url="Principal.xhtml">
+				<f:param name="i" value="0" />
+			</p:menuitem>
+			<p:menuitem value="Productos" outcome="/ui/menu/tabMenu"
+				icon="pi pi-fw pi-home" url="/Servisoft/faces/vistas/Producto.xhtml">
+				<f:param name="i" value="1" />
+			</p:menuitem>
+			<p:menuitem value="Ventas" outcome="/ui/menu/tabMenu"
+				icon="pi pi-fw pi-home" url="/Servisoft/faces/vistas/Venta.xhtml">
+				<f:param name="i" value="2" />
+			</p:menuitem>
+			<p:menuitem value="Cerrar Sesión" outcome="/ui/menu/tabMenu"
+				icon="pi pi-fw pi-home" url="/Servisoft/faces/index.xhtml">
+				<f:param name="i" value="3" />
+			</p:menuitem>
+		</p:tabMenu>
+	</h:form>
+	<b>Cañete, </b>
+	<p:clock pattern="dd/MM/yyyy" mode="server" />
+	<b>Hora: </b>
+	<p:clock pattern="HH:mm:ss" mode="server" />
+
+	<h:form id="RegistrarVent">
+		<p:growl widgetVar="" />
+
+		<p:panel id="pnlVent" header="Registro de Ventas"
+			styleClass="my-heading-row ui-fluid ui-grid-responsive">
+			<h:panelGrid columns="4" width="100%" styleClass="customPanelGrid"
+				columnClasses="p-col-12 p-md-3 p-xl-2, p-col-12 p-md-9 p-xl-4, p-col-12 p-md-3 p-xl-2, p-col-12 p-md-9 p-xl-4">
+
+				<p:outputLabel value="Vendedor" />
+				<p:selectOneMenu value="#{ventaBean.modelVent.codVend}">
+					<f:selectItem noSelectionOption="true"
+						itemLabel="Seleccione un vendedor" />
+					<f:selectItems value="#{vendedorBean.listVend}" var="vend"
+						itemValue="#{vend.codigo}"
+						itemLabel="#{vend.apellido}, #{vend.nombre}" />
+				</p:selectOneMenu>
+				<p:outputLabel value="Cliente" />
+				<p:selectOneMenu value="#{ventaBean.modelVent.codCli}">
+					<f:selectItem noSelectionOption="true"
+						itemLabel="Seleccione un cliente" />
+					<f:selectItems value="#{clienteBean.listarCli}" var="cli"
+						itemValue="#{cli.codigo}"
+						itemLabel="#{cli.apellido}, #{cli.nombre}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Tipo" />
+				<p:selectOneRadio value="#{ventaBean.modelVent.tipo}"
+					unselectable="true">
+					<f:selectItem itemLabel="Delivery" itemValue="D" />
+					<f:selectItem itemLabel="En tienda" itemValue="E" />
+				</p:selectOneRadio>
+			</h:panelGrid>
+		</p:panel>
+		<p:commandButton value="Guardar 1"
+			actionListener="#{ventaBean.registrar()}" />
+		<p:dataTable id="Productos" var="Listprod"
+			value="#{ventaBean.listVentDet}" editable="true"
+			style="margin-bottom:20px" paginatorPosition="bottom" rows="10"
+			paginator="true" stickyHeader="true" stickyTopAt=".layout-topbar"
+			rowsPerPageTemplate="5, 10">
+
+			<p:column headerText="Producto">
+				<p:outputLabel value="#{Listprod.producto.nombre}" />
+			</p:column>
+
+			<p:column headerText="Producto">
+				<p:outputLabel value="#{Listprod.producto.tam}" />
+			</p:column>
+
+			<p:column headerText="Producto">
+				<p:outputLabel value="#{Listprod.producto.precio}" />
+			</p:column>
+
+			<p:column headerText="Cantidad">
+				<p:spinner value="#{Listprod.cant}" min="0">
+					<p:keyFilter regEx="/[0-9]/" />
+					<f:validateLength minimum="1" />
+					<p:ajax global="false"
+						listener="#{ventaBean.calcular(Listprod.producto.precio)}" />
+				</p:spinner>
+			</p:column>
+		</p:dataTable>
+		<p:commandButton value="Guardar"
+			actionListener="#{ventaBean.registrarVD()}" validateClient="true" />
+		<p:dataTable id="comproTable" var="listCom"
+			value="#{ventaBean.listVent}" rows="5" paginator="true"
+			paginatorPosition="bottom" stickyHeader="true"
+			stickyTopAt=".layout-topbar" rowsPerPageTemplate="5, 10">
+			<p:column headerText="Nº Venta">
+				<p:outputLabel value="#{listCom.codigo}" />
+			</p:column>
+			<p:column headerText="Cliente">
+				<p:outputLabel value="#{listCom.cliente}" />
+			</p:column>
+			<p:column headerText="Fecha">
+				<p:outputLabel value="#{listCom.fecha}" />
+			</p:column>
+			<p:column headerText="Total">
+				<p:outputLabel value="#{listCom.total}" />
+			</p:column>
+			<p:column headerText="Comprobante">
+				<p:commandButton onclick="this.form.target='_blank'" ajax="false"
+					title="descargar" icon="fa fa-fw fa-download"
+					actionListener="#{ventaBean.verReporteFACT(listCom)}" />
+			</p:column>
+		</p:dataTable>
+	</h:form>
+</h:body>
+</html>

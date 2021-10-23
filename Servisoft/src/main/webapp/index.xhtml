@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<h:head>
+	<h:outputStylesheet library="css" name="Login.css"/>
+	<title>Iniciar Sesión</title>
+</h:head>
+<h:body >
+	<div class="signupFrm">
+		<h:form id="logForm" styleClass="logForm">
+			
+			<p:growl id="grlLogin" life="5000" widgetVar="msgsLogin">
+			</p:growl>
+			
+			<h1 class="title" align="center">
+				Iniciar Sesión
+			</h1>
+			
+			<div class="inputContainer" align="center">
+				<p:inputText id="txtLogUSER" styleClass="input" value="#{loginBean.modelo.usuario}"
+							required="true">
+					<p:ajax event="keyup" update="grlLogin" listener="#{loginBean.validarUser()}"/>
+					<p:keyFilter regEx="/[a-zA-ZÀ-ú\\s\\' ]+/"/>
+				</p:inputText>
+				<label class="label">Usuario</label>
+			</div>
+			
+			<div class="inputContainer" align="center">
+				<p:password id="txtLogPSWD" styleClass="input" value="#{loginBean.modelo.password}"
+							required="true">
+					<p:ajax event="keyup" listener="#{loginBean.validarCaracteres()}"/>
+				</p:password>
+				<label class="label">Contraseña</label>
+			</div>
+			<div align="right" style="padding-bottom: 20px;">
+				<p:commandButton id="logbtn" styleClass="submitBtn" value="Iniciar sesión" actionListener="#{loginBean.validarLogin()}"
+									onstart="if(#{loginBean.bloquear}){PF('widgetBlock').show()}"
+									oncomplete="PF('widgetBlock').hide()" update="logForm"/>
+			</div>
+			
+			<p:blockUI block="logForm" widgetVar="widgetBlock" trigger="logbtn">
+				<h1>Bloqueado >:v</h1>
+			</p:blockUI>
+			
+			<div align="left" style="padding-bottom: 10px;">
+				<a href="faces/vistas/Cliente.xhtml">¿No te has registrado aún?</a>
+			</div>
+			<div align="left" >
+				<a href="faces/vistas/RecoverPswd.xhtml">¿Olvidaste tu usuario o contraseña?</a>
+			</div>
+		</h:form>
+	</div>
+</h:body>
+</html>

@@ -1,0 +1,51 @@
+@import
+	url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
+
+body {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	background-color: white;
+	font-family: "lato", sans-serif;
+}
+
+.custom-divider {
+	height: 1px;
+	background: rgb(255, 145, 0);
+	background: gray;
+	margin-bottom: 2em;
+}
+
+.registerForm {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+	box-shadow: 0 10px 25px rgba(92, 99, 105, .2);
+}
+
+.regForm {
+	background-color: white;
+	width: auto;
+	border-radius: 8px;
+	padding: 20px 40px;
+	box-shadow: 0 10px 25px rgba(92, 99, 105, .2);
+}
+
+.title {
+	font-size: 30px;
+	margin-bottom: 25px;
+}
+
+.ticket {
+	width: 100%;
+}
+
+body .ui-inputtext {
+	margin-bottom: 0.5em;
+}
+
+body .ui-button {
+	width: 100%;
+	margin-top: 20px;
+}

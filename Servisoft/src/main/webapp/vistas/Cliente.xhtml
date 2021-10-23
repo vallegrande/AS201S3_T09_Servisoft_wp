@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<h:head>
+	<h:outputStylesheet library="css" name="Register.css"/>
+	<title>Clientes</title>
+</h:head>
+<h:body>
+	<div class="registerForm">
+		<h:form id="RegistrarCli" styleClass="regForm">
+			<h1 class="title" align="center">
+				Crear cuenta de usuario
+			</h1>
+			<div class="custom-divider"></div>
+			<form id="formCli">
+				
+				<p:growl id="grlRegister" life="5000" showDetail="true">
+					<p:autoUpdate />
+				</p:growl>
+			
+				<div class="mb-3">
+					<p:inputText value="#{clienteBean.modelo.dni}" styleClass="ticket" placeholder="Nº DNI*" required="true" maxlength="8">
+						<p:ajax event="keyup" update="grlRegister, txtNOMCLI, txtAPECLI" listener="#{clienteBean.mostrarDatosDNI()}"/>
+						<f:validator validatorId="validDNI"/>
+					</p:inputText>
+				</div>
+				<div class="mb-3">
+					<p:inputText id="txtNOMCLI" value="#{clienteBean.modelo.nombre}" style="margin-right: 0.1em;" placeholder="Nombres*" required="true">
+						<p:keyFilter regEx="/[a-zA-ZÀ-ú\\s\\' ]+/"/>
+					</p:inputText>
+					
+					<p:inputText id="txtAPECLI" value="#{clienteBean.modelo.apellido}" style="margin-left: 0.1em;" placeholder="Apellidos*" required="true">
+						<p:keyFilter regEx="/[a-zA-ZÀ-ú\\s\\' ]+/"/>
+					</p:inputText>
+				</div>
+				<div class="mb-3">
+					<p:inputText value="#{clienteBean.modelo.usuario}" style="margin-right: 0.1em;" placeholder="Usuario*" required="true">
+						<p:keyFilter regEx="/[a-zA-ZÀ-ú\\s\\' ]+/"/>
+					</p:inputText>
+					
+					<p:password value="#{clienteBean.modelo.password}" style="margin-left: 0.1em;" placeholder="Contraseña*" required="true">
+						<p:ajax event="keyup" listener="#{loginBean.validarCaracteres()}"/>
+					</p:password>
+				</div>
+				<div class="mb-3">
+					<p:inputText value="#{clienteBean.modelo.celular}" styleClass="ticket" placeholder="Nº Celular" maxlength="9"/>
+				</div>
+				<div class="mb-3">
+					<p:inputText value="#{clienteBean.modelo.correo}" styleClass="ticket" placeholder="Correo*" required="true">
+						<p:ajax event="keyup" update="grlRegister" listener="#{clienteBean.validarCorreo()}"/>
+					</p:inputText>
+				</div>
+				<div class="mb-3">
+					<p:inputText value="#{clienteBean.modelo.direc}" styleClass="ticket" placeholder="Dirección*" required="true"/>
+				</div>
+				<div class="mb-3">
+					<p:selectOneMenu value="#{clienteBean.modelo.codubi}" styleClass="ticket" autoWidth="true" required="true">
+						<f:selectItem noSelectionOption="true" itemLabel="Ubigeo"/>
+						<f:selectItems value="#{ubigeoBean.listarUbi}" var="ubi"
+									itemValue="#{ubi.codigo}"
+									itemLabel="#{ubi.provincia}, #{ubi.departamento}, #{ubi.distrito}"/>
+					</p:selectOneMenu>
+				</div>
+				<div align="center">
+					<p:commandButton value="Crear cuenta" actionListener="#{clienteBean.registrar()}" update="RegistrarCli"/>
+				</div>
+			</form>
+		</h:form>
+	</div>
+</h:body>
+</html>

@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<h:head>
+	<title>Productos</title>
+</h:head>
+<h:body>
+	<h:form>
+		<p:tabMenu activeIndex="#{param.i}">
+			<p:menuitem value="Inicio" outcome="/ui/menu/tabMenu"
+				icon="pi pi-fw pi-home" url="Principal.xhtml">
+				<f:param name="i" value="0" />
+			</p:menuitem>
+			<p:menuitem value="Productos" outcome="/ui/menu/tabMenu"
+				icon="pi pi-fw pi-home" url="/Servisoft/faces/vistas/Producto.xhtml">
+				<f:param name="i" value="1" />
+			</p:menuitem>
+			<p:menuitem value="Ventas" outcome="/ui/menu/tabMenu"
+				icon="pi pi-fw pi-home" url="/Servisoft/faces/vistas/Venta.xhtml">
+				<f:param name="i" value="2" />
+			</p:menuitem>
+			<p:menuitem value="Cerrar Sesión" outcome="/ui/menu/tabMenu"
+				icon="pi pi-fw pi-home" url="/Servisoft/faces/index.xhtml">
+				<f:param name="i" value="3" />
+			</p:menuitem>
+		</p:tabMenu>
+	</h:form>
+	<b>Cañete, </b>
+	<p:clock pattern="dd/MM/yyyy" mode="server" />
+	<b>Hora: </b>
+	<p:clock pattern="HH:mm:ss" mode="server" />
+	<h:form>
+		<p:commandButton value="Cerrar sesión"
+			actionListener="#{productoBean.cerrarSesion()}" />
+	</h:form>
+
+	<h:form id="RegistrarProd">
+
+		<p:growl showDetail="true" life="5000" widgetVar="msgs">
+			<p:autoUpdate />
+		</p:growl>
+
+		<div class="container">
+
+			<!-- Registro de productos -->
+			<p:panel id="pnlProd" header="Registro de Productos"
+				styleClass="my-heading-row ui-fluid ui-grid-responsive">
+
+				<h:panelGrid columns="4" width="100%"
+					style="border:0px none; background-color:transparent;"
+					styleClass="customPanelGrid"
+					columnClasses="p-col-12 p-md-3 p-xl-2, p-col-12 p-md-9 p-xl-4, p-col-12 p-md-3 p-xl-2, p-col-12 p-md-9 p-xl-4">
+
+					<p:outputLabel value="Producto" />
+					<p:inputText value="#{productoBean.modelo.nombre}" />
+
+					<p:outputLabel value="Cosecha" />
+					<p:inputText value="#{productoBean.modelo.fecha}" />
+
+					<p:outputLabel value="Precio" />
+					<p:inputText value="#{productoBean.modelo.precio}" />
+
+					<p:outputLabel value="Tipo" />
+					<p:inputText value="#{productoBean.modelo.tipo}" />
+
+					<p:outputLabel value="Tamaño" />
+					<p:inputText value="#{productoBean.modelo.tam}" />
+
+					<p:outputLabel value="Stock" />
+					<p:inputText value="#{productoBean.modelo.stock}" />
+
+					<p:outputLabel value="Estado" />
+					<p:inputText value="#{productoBean.modelo.estado}" />
+
+				</h:panelGrid>
+				<p:commandButton value="Registrar" action="#{productoC.registrar()}"
+					update=":TablaProd:tblProd" />
+
+			</p:panel>
+
+		</div>
+
+	</h:form>
+
+	<h:form id="TablaProd">
+
+		<!-- Barra de herramientas -->
+		<p:toolbar>
+			<p:toolbarGroup>
+
+				<p:commandButton value="PDF"
+					style="margin-right: 0.5em; margin-left: 0.5em;">
+					<p:dataExporter type="pdf" target="tblProd" fileName="Productos" />
+				</p:commandButton>
+
+				<p:commandButton value="Excel">
+					<p:dataExporter type="xls" target="tblProd" fileName="Productos" />
+				</p:commandButton>
+
+				<p:commandButton value="Piscos"
+					actionListener="#{productoBean.verReportePiscoPDF()}"
+					onclick="this.form.target = '_blank'" ajax="false"
+					style="margin-right: 0.5em; margin-left: 0.5em;" />
+				<p:commandButton value="Vinos"
+					actionListener="#{productoBean.verReporteVinoPDF()}"
+					onclick="this.form.target = '_blank'" ajax="false" />
+			</p:toolbarGroup>
+			<p:toolbarGroup align="right">
+				<strong>Seleccionar por:</strong>
+				<p:selectOneMenu label="Mostrar" value="#{productoBean.opc}"
+					style="margin-right: 0.5em; margin-left: 0.5em;">
+					<f:selectItem noSelectionOption="true" itemLabel="Estado" />
+					<f:selectItem itemValue="1" itemLabel="Todos" />
+					<f:selectItem itemValue="2" itemLabel="Activos" />
+					<f:selectItem itemValue="3" itemLabel="Inactivos" />
+					<p:ajax event="change" listener="#{productoBean.opcListar()}"
+						update="tblProd" />
+				</p:selectOneMenu>
+			</p:toolbarGroup>
+		</p:toolbar>
+		<!-- Barra de herramientas -->
+		<!-- Tabla de datos de producto -->
+		<p:dataTable id="tblProd" var="dtProducto"
+			value="#{productoBean.listarProd}" rows="10" paginator="true"
+			paginatorPosition="bottom" stickyHeader="true"
+			selection="#{productoBean.selectedProduct}"
+			stickyTopAt=".layout-topbar" rowsPerPageTemplate="5, 10"
+			rowKey="#{dtProducto.codigo}" selectionMode="single">
+
+			<p:column headerText="Producto" filterBy="#{dtProducto.nombre}"
+				sortBy="#{dtProducto.nombre}">
+				<p:outputLabel value="#{dtProducto.nombre}" />
+			</p:column>
+
+			<p:column headerText="Clase" filterBy="#{dtProducto.tipo}"
+				sortBy="#{dtProducto.tipo}">
+				<p:outputLabel value="#{dtProducto.tipo}">
+					<f:converter converterId="tipoVal" />
+				</p:outputLabel>
+			</p:column>
+
+			<p:column headerText="Precio" filterBy="#{dtProducto.precio}"
+				sortBy="#{dtProducto.precio}">
+				<p:outputLabel value="#{dtProducto.precio}" />
+			</p:column>
+
+			<p:column headerText="Tamaño" filterBy="#{dtProducto.tam}"
+				sortBy="#{dtProducto.tam}">
+				<p:outputLabel value="#{dtProducto.tam}" />
+			</p:column>
+
+			<p:column headerText="Stock" filterBy="#{dtProducto.stock}"
+				sortBy="#{dtProducto.stock}">
+				<p:outputLabel value="#{dtProducto.stock}" />
+			</p:column>
+		</p:dataTable>
+		<!-- Tabla de datos de producto -->
+
+		<p:contextMenu for="tblProd">
+			<p:menuitem value="Modificar" oncomplete="PF('dlgModificar').show();"
+				actionListener="#{productoBean.datos()}"
+				update="dlgModProd:pnlDataModProd" />
+
+			<p:menuitem value="Eliminar" actionListener="#{productoBean.datos()}"
+				update="pnlDelProd" oncomplete="PF('dlgEliminar').show();" />
+		</p:contextMenu>
+
+		<p:dialog id="dlg1" header="Modificar producto"
+			widgetVar="dlgModificar" showEffect="fade" hideEffect="fade"
+			modal="true">
+			<h:form id="dlgModProd">
+				<h:panelGrid id="pnlDataModProd" columns="4" width="100%"
+					styleClass="customPanelGrid"
+					columnClasses="p-col-12 p-md-3 p-xl-2, p-col-12 p-md-9 p-xl-4, p-col-12 p-md-3 p-xl-2, p-col-12 p-md-9 p-xl-4">
+					<p:inputText value="#{productoBean.modelo.codigo}" disabled="true" />
+					<p:outputLabel />
+
+					<p:outputLabel value="Producto" />
+					<p:inputText value="#{productoBean.modelo.nombre}" />
+
+					<p:outputLabel value="Cosecha" />
+					<p:inputText value="#{productoBean.modelo.fecha}" />
+
+					<p:outputLabel value="Precio" />
+					<p:inputText value="#{productoBean.modelo.precio}" />
+
+					<p:outputLabel value="Tipo" />
+					<p:inputText value="#{productoBean.modelo.tipo}" />
+
+					<p:outputLabel value="Tamaño" />
+					<p:inputText value="#{productoBean.modelo.tam}" />
+
+					<p:outputLabel value="Stock" />
+					<p:inputText value="#{productoBean.modelo.stock}" />
+				</h:panelGrid>
+			</h:form>
+			<f:facet name="footer">
+				<p:commandButton value="Guardar"
+					action="#{productoBean.modificar()}" />
+			</f:facet>
+		</p:dialog>
+
+		<p:dialog id="dlg2" header="Eliminar producto" widgetVar="dlgEliminar"
+			showEffect="fade" hideEffect="fade" modal="true">
+			<p>
+				<strong>¿Desea eliminar este registro?</strong>
+			</p>
+			<h:form id="pnlDelProd">
+				<p:inputText value="#{productoBean.modelo.codigo}" disabled="true" />
+			</h:form>
+			<f:facet name="footer">
+				<div style="margin-right: .5rem;">
+					<p:commandButton value="No" onclick="PF('dlgEliminar').hide();" />
+					<p:commandButton value="Si"
+						actionListener="#{productoBean.eliminar()}"
+						onclick="PF('dlgEliminar').hide();" update="tblProd" />
+				</div>
+			</f:facet>
+		</p:dialog>
+	</h:form>
+</h:body>
+</html>
